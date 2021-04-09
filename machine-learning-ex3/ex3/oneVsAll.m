@@ -11,8 +11,15 @@ function [all_theta] = oneVsAll(X, y, num_labels, lambda)
 m = size(X, 1);
 n = size(X, 2);
 
+m
+"is m"
+n
+"is n"
+
 % You need to return the following variables correctly 
 all_theta = zeros(num_labels, n + 1);
+num_labels
+" is num_labels"
 
 % Add ones to the X data matrix
 X = [ones(m, 1) X];
@@ -49,16 +56,14 @@ X = [ones(m, 1) X];
 %                 initial_theta, options);
 %
 
+size(X)
+" size of x "
 
-
-
-
-
-
-
-
-
-
+initial_theta = zeros(n + 1, 1);
+options = optimset('GradObj', 'on', 'MaxIter', 50);
+for i=1:num_labels
+    [all_theta(i, :)] = fmincg(@(t)(lrCostFunction(t, X, (y == i), lambda)), initial_theta, options);
+endfor
 
 % =========================================================================
 
