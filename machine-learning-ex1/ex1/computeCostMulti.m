@@ -14,7 +14,9 @@ J = 0;
 %               You should set J to the cost.
 
 
-
+h_theta = X * theta;
+h_theta_minus_y = h_theta - y;
+J = sum(h_theta_minus_y .* h_theta_minus_y)/(2*m);
 
 
 % =========================================================================

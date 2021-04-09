@@ -17,15 +17,15 @@ for iter = 1:num_iters
     %       of the cost function (computeCostMulti) and gradient here.
     %
 
+    n = length(X(1,:));
+    thetaResStore = zeros(size(theta));
+    for feature = 1:n
+        thetaResStore(feature) = alpha * (1/m) * sum((X * theta - y) .* X(:, feature));
+    endfor
 
-
-
-
-
-
-
-
-
+    for feature = 1:n
+        theta(feature) -= thetaResStore(feature);
+    endfor
 
     % ============================================================
 

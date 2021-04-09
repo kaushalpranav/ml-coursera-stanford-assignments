@@ -13,9 +13,11 @@ J = 0;
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
 
-
-
-
+% ones_list = ones(size(X(:,1)));
+% X = [ones_list, X]
+h_theta = X * theta;
+h_theta_minus_y = h_theta - y;
+J = sum(h_theta_minus_y .* h_theta_minus_y)/(2*m);
 
 % =========================================================================
 
