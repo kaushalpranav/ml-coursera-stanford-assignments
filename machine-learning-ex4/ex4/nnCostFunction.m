@@ -24,6 +24,7 @@ Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):en
 
 % Setup some useful variables
 m = size(X, 1);
+L = 3;
 
 % You need to return the following variables correctly 
 J = 0;
@@ -38,6 +39,21 @@ Theta2_grad = zeros(size(Theta2));
 %         variable J. After implementing Part 1, you can verify that your
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
+
+a2 = sigmoid([ones(size(X, 1), 1) X] * Theta1');
+
+a3 = sigmoid([ones(size(a2, 1), 1) a2] * Theta2');
+
+for i=1:m
+  y_vector = zeros(num_labels, 1);
+  y_vector = y_vector';
+  y_vector(y(i)) = 1;
+  % size((-y_vector .* log (a3(i, :)))) % - ((1 - y_vector) .* log(1 - a3(i, :))))
+  J += sum((-y_vector .* log (a3(i, :))) - ((1 - y_vector) .* log(1 - a3(i, :))));
+endfor
+
+J = (J/m) + (lambda/(2*m))*(sum(sum(Theta1(:, 2:end) .^ 2)) + sum(sum(Theta2(:, 2:end) .^ 2)));
+
 %
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
@@ -54,6 +70,51 @@ Theta2_grad = zeros(size(Theta2));
 %               over the training examples if you are implementing it for the 
 %               first time.
 %
+
+size(Theta1);
+size(Theta1_grad);
+size(Theta2);
+size(Theta2_grad);
+
+for i=1:m
+  y_vector = zeros(num_labels, 1);
+  y_vector(y(i)) = 1;
+  "Size of y_vector";
+  size(y_vector);
+  "size of a3(i, :)";
+  size(a3(i, :));
+  delta3 = a3(i, :)' - y_vector;
+  "size of delta3";
+  size(delta3);
+  "------------------";
+  "Size of theta2'";
+  size(Theta2');
+  size([1 a2(i, :)]');
+  "size";
+  size((1 - [1 a2(i, :)]'));
+  delta2 = (Theta2' * delta3) .* [1 a2(i, :)]' .* (1 - [1 a2(i, :)]');
+  size(delta2);
+  delta2 = delta2(2:end);
+  "Delta 2";
+  size([1 X(i, :)]);
+  size( delta2 * [1 X(i, :)] );
+  size(X(i, :));
+  Theta2_grad += (delta3 * [1 a2(i, :)]);
+  size(Theta2_grad);
+  Theta1_grad += (delta2 * [1 X(i, :)]);
+endfor
+
+reg_param1 = ((lambda/m) * Theta1);
+reg_param1(:, 1) = 0;
+reg_param2 = ((lambda/m) * Theta2);
+% lambda
+% reg_param2
+reg_param2(:, 1) = 0;
+
+
+Theta1_grad = (1/m)*(Theta1_grad) + reg_param1;
+Theta2_grad = (1/m)*(Theta2_grad) + reg_param2;
+
 % Part 3: Implement regularization with the cost function and gradients.
 %
 %         Hint: You can implement this around the code for
