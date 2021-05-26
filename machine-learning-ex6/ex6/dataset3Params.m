@@ -23,11 +23,24 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+min_this = Inf
+min_C = 0
+min_sigma = 0
+for C=[0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]
+  for sigma=[0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]
+    model = svmTrain(X, y, C, @(x1, x2) gaussianKernel(x1, x2, sigma));
+    predictions = svmPredict(model, Xval);
+    this = mean(double(predictions ~= yval))
+    if (this < min_this)
+      min_this = this
+      min_C = C
+      min_sigma = sigma
+    endif
+  endfor
+endfor
 
-
-
-
-
+C = min_C
+sigma = min_sigma
 
 % =========================================================================
 
