@@ -21,11 +21,12 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
-
-
-
-
-
+pos = 1
+for x=X'
+  [this, i] = min(sum((((ones(size(centroids, 1), 1) * x') - (centroids)) .^ 2), axis = 2));
+  idx(pos) = i;
+  pos = pos + 1;
+endfor
 
 % =============================================================
 
